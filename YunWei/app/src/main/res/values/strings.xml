@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">YunWei</string>
+
+    <!--Main Tab-->
+    <string name="main_home_tab">主页</string>
+    <string name="main_mission_tab">任务</string>
+    <string name="main_track_tab">足迹</string>
+    <string name="main_record_tab">历史</string>
+    <string name="main_mine_tab">我的</string>
+</resources>

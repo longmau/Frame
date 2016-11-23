@@ -1,0 +1,15 @@
+android{
+    /**
+     * 配制参数
+     */
+    buildTypes {
+        release {
+            buildConfigField "String", "DOMAI", "\"http://10.10.10.182/\""
+            buildConfigField "boolean", "LOGSWITCH", "true"
+        }
+        debug {
+            buildConfigField "String", "DOMAI", "\"http://10.10.10.182/\""
+            buildConfigField "boolean", "LOGSWITCH", "false"
+        }
+    }
+}
