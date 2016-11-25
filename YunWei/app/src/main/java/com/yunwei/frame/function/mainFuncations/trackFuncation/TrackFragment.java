@@ -5,9 +5,14 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.yunwei.frame.R;
 import com.yunwei.frame.function.base.BaseFragment;
+import com.yunwei.map.MapView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * @author hezhiWu
@@ -27,10 +32,13 @@ public class TrackFragment extends BaseFragment {
         }
         return fragment;
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.main_fragment_track, null);
+        ButterKnife.bind(this, rootView);
         return rootView;
     }
+
 }

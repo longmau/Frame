@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="com.baidu.tts_2.2.6.20160505_a2af8d6_beta">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../ZN_Library_SDK/libs/com.baidu.tts_2.2.6.20160505_a2af8d6_beta.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

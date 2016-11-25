@@ -4,9 +4,52 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <com.yunwei.frame.view.ReboundScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="我的" />
+        android:scrollbars="none">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/user_bj"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/mainFragment_headView_iv"
+                    android:layout_width="80dip"
+                    android:layout_height="80dip"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/homepage_headimg_defaut" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dip"
+                    android:layout_toRightOf="@+id/mainFragment_headView_iv"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="吴和志"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="研发部"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+    </com.yunwei.frame.view.ReboundScrollView>
 </LinearLayout>

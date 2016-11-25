@@ -35,7 +35,7 @@ public class SplashActivity extends BaseActivity {
         super.dispatchMessage(msg);
         switch (msg.what) {
             case HandlerValue.START_PAGE_DELAYED:
-                ISkipActivityUtil.startIntent(this, MainActivity.class);
+                ISkipActivityUtil.startIntent(this, LoginActivity.class);
                 break;
         }
     }

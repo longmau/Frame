@@ -7,4 +7,11 @@
     <string name="main_track_tab">足迹</string>
     <string name="main_record_tab">历史</string>
     <string name="main_mine_tab">我的</string>
+
+    <!-- Dilaog -->
+    <string name="dialog_defalut_title">标题</string>
+    <string name="dialog_defalut_confirm_text">确定</string>
+    <string name="dialog_defalut_cancel_text">取消</string>
+    <string name="loading_defalut_dialog_text">加载中&#8230;</string>
+
 </resources>

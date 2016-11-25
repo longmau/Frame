@@ -6,10 +6,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 
-import com.ashokvarma.bottomnavigation.BottomNavigationBar;
-import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.yunwei.frame.R;
 import com.yunwei.frame.function.base.BaseFragment;
+import com.yunwei.frame.widget.bottomnavigation.BadgeItem;
+import com.yunwei.frame.widget.bottomnavigation.BottomNavigationBar;
+import com.yunwei.frame.widget.bottomnavigation.BottomNavigationItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,9 @@ public class MainBottomNavigationBar extends BottomNavigationBar implements Bott
      */
     private int containerId;
 
+    private List<Integer> mIconResources;
+    private List<Integer> mTitleResources;
+
     private BottomTabSelectedListener tabSelectedListener;
 
     public MainBottomNavigationBar(Context context) {
@@ -48,11 +52,15 @@ public class MainBottomNavigationBar extends BottomNavigationBar implements Bott
         init();
     }
 
+    /**
+     * 初始化
+     */
     private void init() {
+        this.mIconResources = new ArrayList<>();
+        this.mTitleResources = new ArrayList<>();
         setDefaultConfig();
         setTabSelectedListener(this);
     }
-
 
     /**
      * 初始配置
@@ -60,6 +68,7 @@ public class MainBottomNavigationBar extends BottomNavigationBar implements Bott
     private void setDefaultConfig() {
         setMode(BottomNavigationBar.MODE_FIXED);
         setBackgroundResource(R.color.white);
+        setActiveColor(R.color.colorPrimary);
     }
 
     /**
@@ -93,6 +102,7 @@ public class MainBottomNavigationBar extends BottomNavigationBar implements Bott
         return this;
     }
 
+
     /**
      * 添加TabItem
      *
@@ -103,7 +113,43 @@ public class MainBottomNavigationBar extends BottomNavigationBar implements Bott
     public MainBottomNavigationBar addTabItem(int iconResId, int nameResId) {
         addItem(new BottomNavigationItem(iconResId, nameResId)).initialise();
 
+        mIconResources.add(iconResId);
+        mTitleResources.add(nameResId);
         return this;
+    }
+
+    /**
+     * set Tab sign
+     *
+     * @param tabPosition
+     * @param number
+     */
+    public void addTabSign(int tabPosition, int number) {
+        int iconResource = mIconResources.get(tabPosition);
+        int titleResource = mTitleResources.get(tabPosition);
+        if (number > 0) {
+            BadgeItem item = new BadgeItem();
+            item.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            if (number > 99) {
+                item.setText("99+");
+            } else {
+                item.setText(String.valueOf(number));
+            }
+            removeItem(tabPosition).addItem(tabPosition, new BottomNavigationItem(iconResource, titleResource).setBadgeItem(item)).initialise();
+        } else {
+            removeItem(tabPosition).addItem(tabPosition, new BottomNavigationItem(iconResource, titleResource)).initialise();
+        }
+    }
+
+    /**
+     * remove Tab sign
+     *
+     * @param tabPosition
+     */
+    public void removeTabSign(int tabPosition) {
+        int iconResource = mIconResources.get(tabPosition);
+        int titleResource = mTitleResources.get(tabPosition);
+        removeItem(tabPosition).addItem(tabPosition, new BottomNavigationItem(iconResource, titleResource)).initialise();
     }
 
     /**
@@ -144,7 +190,7 @@ public class MainBottomNavigationBar extends BottomNavigationBar implements Bott
     }
 
     /**
-     * 隐藏Fragment
+     * hide Fragment
      *
      * @param transaction
      */
@@ -155,7 +201,7 @@ public class MainBottomNavigationBar extends BottomNavigationBar implements Bott
     }
 
     /**
-     * 设置监听器
+     * set listener
      *
      * @param listener
      */

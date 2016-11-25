@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/YunWei.iml" filepath="$PROJECT_DIR$/YunWei.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ZN_ArcGis_SDK/ZN_ArcGis_SDK.iml" filepath="$PROJECT_DIR$/ZN_ArcGis_SDK/ZN_ArcGis_SDK.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

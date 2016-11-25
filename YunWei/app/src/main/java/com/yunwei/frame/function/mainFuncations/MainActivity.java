@@ -2,20 +2,18 @@ package com.yunwei.frame.function.mainFuncations;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.yunwei.frame.R;
 import com.yunwei.frame.function.base.BaseActivity;
-import com.yunwei.frame.function.base.BaseFragment;
 import com.yunwei.frame.function.mainFuncations.homeFuncation.HomeFragment;
 import com.yunwei.frame.function.mainFuncations.mineFuncation.MineFragment;
 import com.yunwei.frame.function.mainFuncations.missionFuncation.MissionFragment;
 import com.yunwei.frame.function.mainFuncations.recordFuncation.RecordFragment;
 import com.yunwei.frame.function.mainFuncations.trackFuncation.TrackFragment;
 import com.yunwei.frame.view.MainBottomNavigationBar;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.yunwei.map.MapView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +39,8 @@ public class MainActivity extends BaseActivity implements MainBottomNavigationBa
     FrameLayout mainContainerFl;
     @BindView(R.id.main_bottom_navigationBar)
     MainBottomNavigationBar mainBottomNavigationBar;
+    @BindView(R.id.main_mapView)
+    MapView mapView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +53,27 @@ public class MainActivity extends BaseActivity implements MainBottomNavigationBa
         init();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView.unpause();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mapView.pause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mapView.recycle();
+    }
+
+    /**
+     * 初始化
+     */
     private void init() {
         initBottomNavigationBar();
     }
@@ -62,9 +83,9 @@ public class MainActivity extends BaseActivity implements MainBottomNavigationBa
      */
     private void initBottomNavigationBar() {
         mainBottomNavigationBar.initConfig(this, R.id.main_container_FrameLayout);
-        mainBottomNavigationBar.addTabItem(R.mipmap.main_tab_home_n, R.string.main_home_tab).addTabItem(R.mipmap.main_tab_mission_n, R.string.main_mission_tab).addTabItem(R.mipmap.main_tab_track_n, R.string.main_track_tab).addTabItem(R.mipmap.main_tab_record_n, R.string.main_record_tab).addTabItem(R.mipmap.main_tab_mine_n, R.string.main_mine_tab);
+        mainBottomNavigationBar.addTabItem(R.mipmap.ic_home_white_24dp, R.string.main_home_tab).addTabItem(R.mipmap.main_tab_mission_n, R.string.main_mission_tab).addTabItem(R.mipmap.ic_location_on_white_24dp, R.string.main_track_tab).addTabItem(R.mipmap.main_tab_record_n, R.string.main_record_tab).addTabItem(R.mipmap.main_tab_mine_n, R.string.main_mine_tab);
         mainBottomNavigationBar.addFragment(HomeFragment.newInstance()).addFragment(MissionFragment.newInstance()).addFragment(TrackFragment.newInstance()).addFragment(RecordFragment.newInstance()).addFragment(MineFragment.newInstance());
-        mainBottomNavigationBar.setDefaultFragment(0);
+        mainBottomNavigationBar.setDefaultFragment(2);
         mainBottomNavigationBar.setTabSelectedListener(this);
     }
 
@@ -79,18 +100,23 @@ public class MainActivity extends BaseActivity implements MainBottomNavigationBa
         switch (position) {
             case TAB_HOME:
                 setToolbarCenterTitle(R.string.main_home_tab);
+                mapView.setVisibility(View.VISIBLE);
                 break;
             case TAB_MISSION:
                 setToolbarCenterTitle(R.string.main_mission_tab);
+                mapView.setVisibility(View.GONE);
                 break;
             case TAB_TRACK:
                 setToolbarCenterTitle(R.string.main_track_tab);
+                mapView.setVisibility(View.VISIBLE);
                 break;
             case TAB_RECORD:
                 setToolbarCenterTitle(R.string.main_record_tab);
+                mapView.setVisibility(View.GONE);
                 break;
             case TAB_MINE:
                 setToolbarCenterTitle(R.string.main_mine_tab);
+                mapView.setVisibility(View.GONE);
                 break;
         }
     }
