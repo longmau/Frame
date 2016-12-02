@@ -113,7 +113,7 @@ public class ArcGisLocationLayer extends ArcGisBaseMapView {
                 mGraphicsLayerLoc.updateGraphic(graphicId, graphic);
             } else {
                 graphicId = graphicsLayer.addGraphic(graphic);
-                setScale(GoogleMapLayer.scales[10]);
+                setScale(GoogleMapLayer.scales[16]);
             }
         }
         return graphic;

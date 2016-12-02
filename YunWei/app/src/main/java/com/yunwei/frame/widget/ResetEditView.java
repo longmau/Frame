@@ -72,13 +72,13 @@ public class ResetEditView extends LinearLayout implements TextWatcher, View.OnC
         if (drawable != null) {
             resetEditViewIconIv.setImageDrawable(drawable);
         }
-        if (type==0x10){
+        if (type == 0x10) {
             resetEditView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        }else {
+        } else {
             resetEditView.setInputType(type);
         }
 
-    typedArray.recycle();
+        typedArray.recycle();
     }
 
     @Override
@@ -108,5 +108,32 @@ public class ResetEditView extends LinearLayout implements TextWatcher, View.OnC
                 resetEditViewCloseIv.setVisibility(GONE);
                 break;
         }
+    }
+
+    /**
+     * 设置内容
+     *
+     * @param text
+     */
+    public void setText(String text) {
+        resetEditView.setText(text);
+    }
+
+    /**
+     * 设置内容
+     *
+     * @param resId
+     */
+    public void setText(int resId) {
+        resetEditView.setText(resId);
+    }
+
+    /**
+     * 返回内容
+     *
+     * @return
+     */
+    public String getText() {
+        return resetEditView.getText().toString();
     }
 }

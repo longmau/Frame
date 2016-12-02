@@ -3,6 +3,7 @@ package com.yunwei.frame.function.account;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -10,9 +11,12 @@ import com.bumptech.glide.Glide;
 import com.yunwei.frame.R;
 import com.yunwei.frame.common.Constant;
 import com.yunwei.frame.common.handler.HandlerValue;
+import com.yunwei.frame.function.account.data.UserInfoEntity;
+import com.yunwei.frame.function.account.data.soure.LoginRemoteRepo;
 import com.yunwei.frame.function.base.BaseActivity;
 import com.yunwei.frame.function.mainFuncations.MainActivity;
 import com.yunwei.frame.utils.ISkipActivityUtil;
+import com.yunwei.frame.utils.ISpfUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,10 +29,12 @@ import butterknife.ButterKnife;
  * @date 2016/11/22 16:46
  */
 
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends BaseActivity implements AccountContract.LoginView {
 
     @BindView(R.id.splash_iv)
     ImageView splashIv;
+
+    private LoginPresenter loginPresenter;
 
     @Override
     protected void dispatchMessage(Message msg) {
@@ -48,15 +54,58 @@ public class SplashActivity extends BaseActivity {
         setSwipeEnabled(false);
         ButterKnife.bind(this);
         Glide.with(this).load(R.mipmap.default_welcom).into(splashIv);
-        /**
-         * 延时启动
-         */
-        mHandler.sendEmptyMessageDelayed(HandlerValue.START_PAGE_DELAYED, Constant.THREE_SECONDES);
+        /*重新登录获取新Token*/
+        if (!TextUtils.isEmpty(ISpfUtil.getValue(Constant.ACCOUNT_KEY, "").toString()) && !TextUtils.isEmpty(ISpfUtil.getValue(Constant.PSSWORD_KEY, "").toString())) {
+            loginPresenter = new LoginPresenter(LoginRemoteRepo.newInstance(), this);
+            loginPresenter.login();
+        } else {
+            mHandler.sendEmptyMessageDelayed(HandlerValue.START_PAGE_DELAYED, Constant.THREE_SECONDES);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         super.finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (loginPresenter!=null){
+            loginPresenter.cancelRequest();
+        }
+    }
+
+    @Override
+    public void showDialog() {
+
+    }
+
+    @Override
+    public String getPassword() {
+        return ISpfUtil.getValue(Constant.PSSWORD_KEY, "").toString();
+    }
+
+    @Override
+    public String getAccount() {
+        return ISpfUtil.getValue(Constant.ACCOUNT_KEY, "").toString();
+    }
+
+    @Override
+    public void loginFailure(String error) {
+        ISkipActivityUtil.startIntent(this,LoginActivity.class);
+        finish();
+    }
+
+    @Override
+    public void loginSuccess(UserInfoEntity entity) {
+        ISkipActivityUtil.startIntent(this,MainActivity.class);
+        finish();
+    }
+
+    @Override
+    public void dismissDialog() {
+
     }
 }

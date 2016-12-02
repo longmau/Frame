@@ -32,7 +32,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
 import com.yunwei.frame.R;
-import com.yunwei.frame.utils.IDensityUtils;
+import com.yunwei.frame.utils.IDensityUtil;
 
 /**
  * @Package: com.yunwei.zaina.widget
@@ -76,7 +76,7 @@ public class SwipeBackLayout extends FrameLayout {
         touchSlop = (int) (touchSlopDP * activity.getResources().getDisplayMetrics().density);
         sideWidth = (int) (sideWidthInDP * activity.getResources().getDisplayMetrics().density);
         mActivity = activity;
-        screenWidth = IDensityUtils.getScreenW(activity);
+        screenWidth = IDensityUtil.getScreenW(activity);
         setClickable(true);
         final ViewGroup root = (ViewGroup) activity.getWindow().getDecorView();
         content = root.getChildAt(0);

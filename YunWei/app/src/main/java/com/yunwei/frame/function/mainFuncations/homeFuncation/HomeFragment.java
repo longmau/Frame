@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.yunwei.frame.R;
 import com.yunwei.frame.function.base.BaseFragment;
+import com.yunwei.frame.utils.ILog;
 
 /**
  * @author hezhiWu
@@ -18,6 +19,7 @@ import com.yunwei.frame.function.base.BaseFragment;
  */
 
 public class HomeFragment extends BaseFragment {
+    private final String TAG = getClass().getSimpleName();
 
     private static HomeFragment fragment;
 
@@ -28,10 +30,35 @@ public class HomeFragment extends BaseFragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ILog.d(TAG, "onCreate");
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.main_fragment_home, null);
+        ILog.d(TAG, "onCreateView");
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ILog.d(TAG, "onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        ILog.d(TAG, "onPause");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ILog.d(TAG, "onDestroy");
     }
 }

@@ -14,41 +14,60 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/user_bj"
-                android:gravity="center">
+            <include layout="@layout/user_info_head_layout" />
 
-                <ImageView
-                    android:id="@+id/mainFragment_headView_iv"
-                    android:layout_width="80dip"
-                    android:layout_height="80dip"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/homepage_headimg_defaut" />
+            <TextView
+                android:id="@+id/MineFragment_Message_seting_textView"
+                style="@style/seting_item_layout"
+                android:drawableLeft="@mipmap/icon_message"
+                android:drawableRight="@mipmap/arrow_right"
+                android:text="@string/set_msg_info" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dip"
-                    android:layout_toRightOf="@+id/mainFragment_headView_iv"
-                    android:orientation="vertical">
+            <View style="@style/line" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="吴和志"
-                        android:textSize="18sp" />
+            <TextView
+                android:id="@+id/MineFragment_Track_seting_textView"
+                style="@style/seting_item_layout"
+                android:drawableLeft="@mipmap/icon_setup"
+                android:drawableRight="@mipmap/arrow_right"
+                android:text="@string/set_track_info" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="研发部"
-                        android:textSize="18sp" />
+            <View style="@style/line" />
 
-                </LinearLayout>
-            </RelativeLayout>
+            <View
+                style="@style/line"
+                android:layout_marginTop="20dp" />
+
+            <TextView
+                android:id="@+id/MineFragment_about_textView"
+                style="@style/seting_item_layout"
+                android:drawableLeft="@mipmap/icon_about"
+                android:drawableRight="@mipmap/arrow_right"
+                android:text="@string/set_about" />
+
+            <View style="@style/line" />
+
+            <View
+                style="@style/line"
+                android:layout_marginTop="20dp" />
+
+            <TextView
+                android:id="@+id/MineFragment_switch_user_textView"
+                style="@style/seting_item_layout"
+                android:drawableLeft="@mipmap/icon_switch_user"
+                android:drawableRight="@mipmap/arrow_right"
+                android:text="@string/change_user" />
+
+            <View style="@style/line" />
+
+            <TextView
+                android:id="@+id/MineFragment_exit_textView"
+                style="@style/seting_item_layout"
+                android:drawableLeft="@mipmap/icon_quit"
+                android:drawableRight="@mipmap/arrow_right"
+                android:text="@string/exit" />
+
+            <View style="@style/line" />
 
         </LinearLayout>
     </com.yunwei.frame.view.ReboundScrollView>

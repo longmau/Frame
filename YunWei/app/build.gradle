@@ -7,10 +7,10 @@ android {
 
     defaultConfig {
         applicationId "com.yunwei.base"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.1"
 
         /*设置支持的CPU类型*/
         ndk {
@@ -59,15 +59,28 @@ def currentTime() {
     return new Date().format("yyyyMMdd")
 }
 
+allprojects {
+    repositories {
+        jcenter()
+        maven {
+            url "https://jitpack.io"
+        }
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
+    compile project(':ZN_ArcGis_SDK')
     /*依赖注入--吴和志*/
     compile 'com.jakewharton:butterknife:8.4.0'
     compile 'com.jakewharton:butterknife-compiler:8.4.0'
     /*图片加载--吴和志*/
     compile 'com.github.bumptech.glide:glide:latest.release'
-
-    compile project(':ZN_ArcGis_SDK')
+    /*Eventbus*/
+    compile 'org.greenrobot:eventbus:3.0.0'
+    /*retrofit 网络请求框架*/
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 }

@@ -172,7 +172,7 @@ public class ArcGisBaseMapView extends MapView implements OnStatusChangedListene
             public void onClick(View v) {
                 if (!isFlow) {
                     setExtent(point);
-                    setScale(GoogleMapLayer.scales[15]);
+                    setScale(GoogleMapLayer.scales[16]);
                     isFlow = true;
                     locationIv.setImageResource(R.mipmap.custom_follow);
                 } else {

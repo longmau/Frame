@@ -30,4 +30,44 @@ public class Constant {
     public static final long FIVTEEN_MINUTES_TO_MILLSECONDS = 15 * 60 * 1000;// 15minutes
     public static final long TIMESHIFT_TOTAL_TO_MILLSECONDS = 1 * 60 * 60 * 1000; // 1hour
     public static final long LIVEBACK_TOTAL_TO_MILLSECONDS = 3 * 24 * 60 * 60 * 1000;// 3d
+
+    /**
+     * 设置通知相关
+     */
+    public static final String MESSAGE_VOICE_SIGN = "message_voice";/*消息任务语音*/
+    public static final String MESSAGE_NOTICE_SIGN = "message_notice";/*消息任务通知*/
+    public static final String TRACK_RECORD_MODE_KEY = "TRACK_RECORD_MODE";/*足迹记录方式*/
+    /**
+     * User
+     */
+    public static final String ACCESS_TOKEN_KEY = "access_token";/*Token*/
+    public static final String ACCOUNT_KEY = "account";/*用户名*/
+    public static final String PSSWORD_KEY = "password";/*密码*/
+    public static final String USERINFO_KEY = "userInfo";/*登录信息*/
+    /**
+     * 七牛Token key
+     */
+    public static final String QINIU_TOKEN_KEY = "qiniu_token";
+
+    /**
+     * Http code
+     */
+    public static final int HTTP_SUCESS_CODE = 200;/*Http请求成功返回码*/
+    public static final int HTTP_PASSWORD_ERROR_CODE = 400;/*登录账号或密码失败*/
+
+    /**
+     * 足迹采集方式
+     */
+    public enum TRACK_RECORD_MODE {
+        WALK(0), RIDING(1), DRIVE(2);
+        private int value;
+
+        public int getValue() {
+            return value;
+        }
+
+        TRACK_RECORD_MODE(int value) {
+            this.value = value;
+        }
+    }
 }

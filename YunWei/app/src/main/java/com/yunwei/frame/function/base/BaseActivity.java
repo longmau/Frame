@@ -1,5 +1,6 @@
 package com.yunwei.frame.function.base;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,9 +21,22 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
 import com.yunwei.frame.R;
+import com.yunwei.frame.common.dialog.ToastUtil;
+import com.yunwei.frame.common.eventbus.EventConstant;
+import com.yunwei.frame.common.eventbus.NoticeEvent;
 import com.yunwei.frame.common.handler.BaseHandler;
+import com.yunwei.frame.utils.IActivityManage;
+import com.yunwei.frame.utils.ILog;
+import com.yunwei.frame.utils.IStringUtils;
 import com.yunwei.frame.widget.SwipeBackLayout;
+import com.yunwei.map.entity.MPointEntity;
+import com.yunwei.map.utils.ILngLatMercator;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * @author hezhiWu
@@ -33,6 +47,7 @@ import com.yunwei.frame.widget.SwipeBackLayout;
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
+    private final String TAG=getClass().getSimpleName();
     /**
      * Toolbar
      */
@@ -79,10 +94,13 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected BaseHandler mHandler;
 
+    protected Dialog loadDialog;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_base);
+        IActivityManage.getInstance().addActivity(this);
         init();
     }
 
@@ -90,6 +108,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         //实例化Activity侧滑Finish()
         swipeBackLayout = new SwipeBackLayout(this);
         swipeBackLayout.replaceLayer(this);
+
+        EventBus.getDefault().register(this);
 
         mInput = (InputMethodManager) getApplication().getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -153,6 +173,42 @@ public abstract class BaseActivity extends AppCompatActivity {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mLinearLayoutContent.removeAllViews();
         mLinearLayoutContent.addView(view, lp);
+    }
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onBackGroundUserEvent(NoticeEvent event) {
+        switch (event.getFlag()) {
+            case EventConstant.NOTICE2:/*高德地位返回(GC-J02)*/
+                AMapLocation aMapLocation = (AMapLocation) event.getObj();
+                if (aMapLocation == null) {
+                    return;
+                }
+                ILog.d(TAG,"pro=="+aMapLocation.getProvider());
+                /*转成墨卡托坐标*/
+                MPointEntity mercatorPoint = ILngLatMercator.lonLat2WebMercator(aMapLocation.getLongitude(), aMapLocation.getLatitude());
+
+                /*保存全局数据，设施采集、巡查上报等功能模块使用*/
+                DataApplication.getInstance().setLat(aMapLocation.getLatitude());
+                DataApplication.getInstance().setLng(aMapLocation.getLongitude());
+                DataApplication.getInstance().setX(mercatorPoint.getX());
+                DataApplication.getInstance().setY(mercatorPoint.getY());
+                if (!IStringUtils.isEmpty(aMapLocation.getAddress())) {
+                    DataApplication.getInstance().setCurrentAddr(aMapLocation.getAddress());
+                }
+                if (!IStringUtils.isEmpty(aMapLocation.getStreet())) {
+                    DataApplication.getInstance().setStreet(aMapLocation.getStreet());
+                }
+                refreshLocation(aMapLocation,mercatorPoint);
+        }
+    }
+
+    /**
+     * 刷新定位点位置
+     *
+     * @param point
+     */
+    public void refreshLocation(AMapLocation location,MPointEntity point) {
+
     }
 
     /**
@@ -330,6 +386,24 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void hideSoftInput(EditText et) {
         if (null != mInput && mInput.isActive())
             mInput.hideSoftInputFromWindow(et.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    /**
+     * Toast
+     *
+     * @param resid
+     */
+    public void showToast(int resid) {
+        ToastUtil.showToast(this, resid);
+    }
+
+    /**
+     * Toast
+     *
+     * @param msg
+     */
+    public void showToast(String msg) {
+        ToastUtil.showToast(this, msg);
     }
 
     @Override

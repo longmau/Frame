@@ -14,8 +14,10 @@
             android:id="@+id/dialog_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="15dip"
+            android:gravity="center|left"
+            android:paddingLeft="20dip"
+            android:paddingRight="20dip"
+            android:paddingTop="20dip"
             android:text="@string/dialog_defalut_title"
             android:textColor="@color/black"
             android:textSize="20sp" />
@@ -24,6 +26,7 @@
             android:id="@+id/dialog_content_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="20dip"
             android:layout_weight="1" />
 
         <LinearLayout
