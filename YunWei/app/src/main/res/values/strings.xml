@@ -39,6 +39,7 @@
     <string name="login_failure">登录失败</string>
     <string name="account_pwd_error">账号或密码错误</string>
 
+    <string name="foregroun_content_text">定位服务正在运行</string>
 
     <array name="track_mode">
         <item>步行</item>

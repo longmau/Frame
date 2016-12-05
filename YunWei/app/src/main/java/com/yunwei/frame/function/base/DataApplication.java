@@ -5,6 +5,7 @@ import android.app.Application;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.yunwei.frame.service.MonitorService;
+import com.yunwei.frame.utils.ILog;
 
 /**
  * @author hezhiWu
@@ -15,6 +16,7 @@ import com.yunwei.frame.service.MonitorService;
  */
 
 public class DataApplication extends Application {
+    private String TAG=getClass().getSimpleName();
 
     private static DataApplication instance;
 
@@ -22,26 +24,18 @@ public class DataApplication extends Application {
     private AMapLocationClient mLocationClient;
     /*定位option*/
     private AMapLocationClientOption locationClientOption;
-
-    /*经度*/
-    private double lng;
-    /*纬度*/
-    private double lat;
-    /*墨卡托坐标*/
-    private double x;
-    private double y;
-    private double z;
-    /*当前位置信息*/
-    private String currentAddr;
-    /*当前路段*/
-    private String street;
+    /*监控服务*/
+    private MonitorService monitorService;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
-
         initLocationClient();
+    }
+
+    public static DataApplication getInstance() {
+        return instance;
     }
 
     /**
@@ -59,77 +53,34 @@ public class DataApplication extends Application {
         mLocationClient.setLocationListener(new MonitorService());
     }
 
-    public void startLocationService() {
+    /**
+     * 启动定位
+     */
+    public void startLocation() {
         mLocationClient.startLocation();
     }
 
-    private void stopLocationService() {
+    /**
+     * 停止定位
+     */
+    public void stopLocationService() {
         mLocationClient.stopLocation();
     }
 
-    private void destoryLocationService() {
+    /**
+     * 销毁定位服务
+     */
+    public void destoryLocation() {
         mLocationClient.onDestroy();
         mLocationClient = null;
         locationClientOption = null;
     }
 
-    public static DataApplication getInstance() {
-        return instance;
+    public MonitorService getMonitorService() {
+        return monitorService;
     }
 
-    public double getLng() {
-        return lng;
-    }
-
-    public void setLng(double lng) {
-        this.lng = lng;
-    }
-
-    public double getLat() {
-        return lat;
-    }
-
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    public double getZ() {
-        return z;
-    }
-
-    public void setZ(double z) {
-        this.z = z;
-    }
-
-    public String getCurrentAddr() {
-        return currentAddr;
-    }
-
-    public void setCurrentAddr(String currentAddr) {
-        this.currentAddr = currentAddr;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
+    public void setMonitorService(MonitorService monitorService) {
+        this.monitorService = monitorService;
     }
 }

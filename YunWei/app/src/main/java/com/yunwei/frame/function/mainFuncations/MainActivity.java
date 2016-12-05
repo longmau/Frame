@@ -5,14 +5,18 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import com.amap.api.location.AMapLocation;
 import com.esri.core.geometry.Point;
 import com.yunwei.frame.R;
-import com.yunwei.frame.common.Constant;
+import com.yunwei.frame.common.dialog.DialogFactory;
+import com.yunwei.frame.common.handler.HandlerValue;
 import com.yunwei.frame.function.base.BaseActivity;
 import com.yunwei.frame.function.base.DataApplication;
 import com.yunwei.frame.function.mainFuncations.data.soure.MainRemoteRepo;
@@ -22,13 +26,12 @@ import com.yunwei.frame.function.mainFuncations.missionFuncation.MissionFragment
 import com.yunwei.frame.function.mainFuncations.recordFuncation.RecordFragment;
 import com.yunwei.frame.function.mainFuncations.trackFuncation.MainPresenter;
 import com.yunwei.frame.function.mainFuncations.trackFuncation.TrackFragment;
-import com.yunwei.frame.service.LocationService;
 import com.yunwei.frame.service.MonitorService;
-import com.yunwei.frame.utils.ILog;
-import com.yunwei.frame.utils.ISpfUtil;
+import com.yunwei.frame.utils.IActivityManage;
 import com.yunwei.frame.view.MainBottomNavigationBar;
 import com.yunwei.map.MapView;
 import com.yunwei.map.entity.MPointEntity;
+import com.yunwei.map.utils.ILngLatMercator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,7 +63,29 @@ public class MainActivity extends BaseActivity implements MainBottomNavigationBa
 
     private MainPresenter mMainPresenter;
 
+    /*Service*/
     private MonitorService monitorService;
+    private ServiceConnection monitorConnection;
+    /*TODO Service与Activity通讯通过静态调用处理，此处待优化*/
+    public static Messenger mServiceMessenger;
+
+    @Override
+    protected void dispatchMessage(Message msg) {
+        super.dispatchMessage(msg);
+        switch (msg.what) {
+            /*定位回调处理*/
+            case HandlerValue.LOCATION_SUCCESS_KEY:
+                AMapLocation location = (AMapLocation) msg.obj;
+                if (location == null) {
+                    return;
+                }
+                 /*转成墨卡托坐标*/
+                MPointEntity point = ILngLatMercator.lonLat2WebMercator(location.getLongitude(), location.getLatitude());
+                /*定位点刷新*/
+                mapView.updateCurrentLocation(new Point(point.getX(), point.getY()));
+                break;
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,39 +96,36 @@ public class MainActivity extends BaseActivity implements MainBottomNavigationBa
         ButterKnife.bind(this);
 
         init();
-        ILog.d(TAG, "onCreate");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mapView.unpause();
-        ILog.d(TAG, "onResume");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mapView.pause();
-        ILog.d(TAG, "onPause");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mapView.recycle();
-        stopLocationService();
-        ILog.d(TAG, "onDestroy");
+        unbindMonitorService();
     }
 
     /**
      * 初始化
      */
     private void init() {
+        mServiceMessenger = new Messenger(mHandler);
+
         initBottomNavigationBar();
         initPresenter();
-        startLocationServer();
-        DataApplication.getInstance().startLocationService();
+        bindMonitorServer();
     }
 
     /**
@@ -128,34 +150,32 @@ public class MainActivity extends BaseActivity implements MainBottomNavigationBa
     /**
      * 启动定位服务
      */
-    private void startLocationServer() {
-//        Intent intent = new Intent(this, LocationService.class);
-//        startService(intent);
-
-        Intent intent1 = new Intent(this, MonitorService.class);
-        startService(intent1);
-        bindService(intent1, new ServiceConnection() {
+    private void bindMonitorServer() {
+        Intent intent = new Intent(this, MonitorService.class);
+        monitorConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 monitorService = ((MonitorService.MonitorBinder) service).getService();
+                DataApplication.getInstance().setMonitorService(monitorService);
             }
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
-
+                monitorService = null;
             }
-        }, BIND_AUTO_CREATE);
+        };
+        bindService(intent, monitorConnection, BIND_AUTO_CREATE);
+        /*服务启动*/
+        DataApplication.getInstance().startLocation();
     }
 
     /**
      * 停止定位服务
      */
-    private void stopLocationService() {
-//        Intent intent = new Intent(this, LocationService.class);
-//        stopService(intent);
-
-//        Intent intent1= new Intent(this, MonitorService.class);
-//        stopService(intent1);
+    private void unbindMonitorService() {
+        DataApplication.getInstance().stopLocationService();
+        DataApplication.getInstance().destoryLocation();
+        unbindService(monitorConnection);
     }
 
     @Override
@@ -191,8 +211,23 @@ public class MainActivity extends BaseActivity implements MainBottomNavigationBa
     }
 
     @Override
-    public void refreshLocation(AMapLocation location, MPointEntity point) {
-        super.refreshLocation(location, point);
-        mapView.updateCurrentLocation(new Point(point.getX(), point.getY()));
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            showExitDialog();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 退出Dialog
+     */
+    private void showExitDialog() {
+        DialogFactory.showMsgDialog(this, getString(R.string.dialog_title_exit), getString(R.string.exit_msg) + getString(R.string.app_name) + "?", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IActivityManage.getInstance().exit();
+            }
+        });
     }
 }

@@ -53,9 +53,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/JK.SwipeBack.Transparent.Theme" />
 
-        <!--定位服务-->
-        <service android:name=".service.LocationService" />
-
+        <!--监控服务-->
         <service android:name=".service.MonitorService" />
         <!-- 高德地图配制[吴和志] -->
         <meta-data

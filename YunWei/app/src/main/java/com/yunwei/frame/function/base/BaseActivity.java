@@ -47,7 +47,7 @@ import org.greenrobot.eventbus.ThreadMode;
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
-    private final String TAG=getClass().getSimpleName();
+    private final String TAG = getClass().getSimpleName();
     /**
      * Toolbar
      */
@@ -177,37 +177,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onBackGroundUserEvent(NoticeEvent event) {
-        switch (event.getFlag()) {
-            case EventConstant.NOTICE2:/*高德地位返回(GC-J02)*/
-                AMapLocation aMapLocation = (AMapLocation) event.getObj();
-                if (aMapLocation == null) {
-                    return;
-                }
-                ILog.d(TAG,"pro=="+aMapLocation.getProvider());
-                /*转成墨卡托坐标*/
-                MPointEntity mercatorPoint = ILngLatMercator.lonLat2WebMercator(aMapLocation.getLongitude(), aMapLocation.getLatitude());
-
-                /*保存全局数据，设施采集、巡查上报等功能模块使用*/
-                DataApplication.getInstance().setLat(aMapLocation.getLatitude());
-                DataApplication.getInstance().setLng(aMapLocation.getLongitude());
-                DataApplication.getInstance().setX(mercatorPoint.getX());
-                DataApplication.getInstance().setY(mercatorPoint.getY());
-                if (!IStringUtils.isEmpty(aMapLocation.getAddress())) {
-                    DataApplication.getInstance().setCurrentAddr(aMapLocation.getAddress());
-                }
-                if (!IStringUtils.isEmpty(aMapLocation.getStreet())) {
-                    DataApplication.getInstance().setStreet(aMapLocation.getStreet());
-                }
-                refreshLocation(aMapLocation,mercatorPoint);
-        }
-    }
-
-    /**
-     * 刷新定位点位置
-     *
-     * @param point
-     */
-    public void refreshLocation(AMapLocation location,MPointEntity point) {
 
     }
 
@@ -384,8 +353,9 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param et
      */
     public void hideSoftInput(EditText et) {
-        if (null != mInput && mInput.isActive())
+        if (null != mInput && mInput.isActive()) {
             mInput.hideSoftInputFromWindow(et.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
     /**
