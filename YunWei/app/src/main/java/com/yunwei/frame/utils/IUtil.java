@@ -23,4 +23,17 @@ public class IUtil {
     public static String getStrToRes(int res) {
         return DataApplication.getInstance().getResources().getString(res);
     }
+
+    /**
+     * Url过滤
+     *
+     * @param url
+     * @return
+     */
+    public static String fitterUrl(String url) {
+        if (!url.contains("http://")) {
+            url = "file://" + url;
+        }
+        return url;
+    }
 }

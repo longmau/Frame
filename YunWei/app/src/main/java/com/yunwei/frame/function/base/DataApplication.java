@@ -4,8 +4,12 @@ import android.app.Application;
 
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
+import com.google.gson.Gson;
+import com.yunwei.frame.common.Constant;
+import com.yunwei.frame.function.account.data.UserInfoEntity;
 import com.yunwei.frame.service.MonitorService;
 import com.yunwei.frame.utils.ILog;
+import com.yunwei.frame.utils.ISpfUtil;
 
 /**
  * @author hezhiWu
@@ -16,7 +20,7 @@ import com.yunwei.frame.utils.ILog;
  */
 
 public class DataApplication extends Application {
-    private String TAG=getClass().getSimpleName();
+    private String TAG = getClass().getSimpleName();
 
     private static DataApplication instance;
 
@@ -65,6 +69,17 @@ public class DataApplication extends Application {
      */
     public void stopLocationService() {
         mLocationClient.stopLocation();
+    }
+
+    /**
+     * 获取用户信息
+     *
+     * @return
+     */
+    public UserInfoEntity getUserInfoEntity() {
+        String string = ISpfUtil.getValue(Constant.USERINFO_KEY, "").toString();
+        UserInfoEntity entity = new Gson().fromJson(string, UserInfoEntity.class);
+        return entity;
     }
 
     /**

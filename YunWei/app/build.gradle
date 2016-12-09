@@ -11,6 +11,7 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0.1"
+        multiDexEnabled true
 
         /*设置支持的CPU类型*/
         ndk {
@@ -54,7 +55,6 @@ android {
     }
 }
 /*获取系统当前时间*/
-
 def currentTime() {
     return new Date().format("yyyyMMdd")
 }

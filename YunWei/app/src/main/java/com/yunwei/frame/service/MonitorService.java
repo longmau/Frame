@@ -13,6 +13,7 @@ import com.yunwei.frame.R;
 import com.yunwei.frame.common.handler.HandlerValue;
 import com.yunwei.frame.function.mainFuncations.MainActivity;
 import com.yunwei.frame.utils.NotificationUtil;
+import com.yunwei.frame.utils.PollingUtils;
 
 /**
  * @author hezhiWu
@@ -32,7 +33,10 @@ public class MonitorService extends Service implements AMapLocationListener {
     @Override
     public void onCreate() {
         super.onCreate();
+        /*开启前台服务*/
         startForeground(17, NotificationUtil.sendNotification(getString(R.string.app_name), getString(R.string.foregroun_content_text), MainActivity.class));
+        /*开始轮询*/
+        PollingUtils.startPollingService(this, 1);
     }
 
     @Nullable
@@ -53,10 +57,19 @@ public class MonitorService extends Service implements AMapLocationListener {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        /*停止前台服务*/
+        stopForeground(true);
+        /*停止轮询*/
+        PollingUtils.stopPollingService(this);
+    }
+
+    @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
         if (aMapLocation != null) {
             if (aMapLocation.getErrorCode() == 0) {
-                this.location=aMapLocation;
+                this.location = aMapLocation;
                 Message message = new Message();
                 message.what = HandlerValue.LOCATION_SUCCESS_KEY;
                 message.obj = aMapLocation;

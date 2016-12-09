@@ -8,13 +8,13 @@ import java.util.List;
 /**
  * @Package: com.yunwei.zaina.utils
  * @Description: Activity类管工具类
- * @author: Aaron
+ * @author: hezhiWu
  * @date: 2016-05-31
  * @Time: 11:59
  * @version: V1.0
  */
 public class IActivityManage {
-    private List<Activity> activities = new ArrayList<Activity>();
+    private List<Activity> activities = new ArrayList<>();
 
     private static IActivityManage mActivityManage;
 
@@ -41,9 +41,10 @@ public class IActivityManage {
         if (activities == null)
             return;
         for (Activity activity : activities) {
-            if (activity != null)
+            if (activity != null) {
                 activity.finish();
-                System.gc();
+            }
+
         }
     }
 

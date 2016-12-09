@@ -30,18 +30,21 @@ import java.util.Map;
 public class ArcGisLocationLayer extends ArcGisBaseMapView {
 
     private final String TAG = getClass().getSimpleName();
-
-    private GraphicsLayer mGraphicsLayerLoc = null;// 定位图层
-    private GraphicsLayer mGraphicsLayerTrack = null;//足迹采集图层
-    private GraphicsLayer mGraphicsLayerPoint = null;//点的图层
+    /*定位图块*/
+    private GraphicsLayer mGraphicsLayerLoc = null;
+    /*足迹采集图层*/
+    private GraphicsLayer mGraphicsLayerTrack = null;
+    /*点图层*/
+    private GraphicsLayer mGraphicsLayerPoint = null;
 
     private int graphicId = -1;
     //记录是否开启足迹
     public boolean isTrackRecording = false;
 
+    private boolean isAddLocIcon = false;
+
     public ArcGisLocationLayer(Context context) {
-        super(context);
-        initLocationLayer();
+        super(context, null);
     }
 
     public ArcGisLocationLayer(Context context, AttributeSet attr) {
@@ -49,11 +52,14 @@ public class ArcGisLocationLayer extends ArcGisBaseMapView {
         initLocationLayer();
     }
 
+    /**
+     * 初始化图层
+     */
     private void initLocationLayer() {
         mGraphicsLayerLoc = new GraphicsLayer();
         mGraphicsLayerTrack = new GraphicsLayer();
         mGraphicsLayerPoint = new GraphicsLayer();
-        addLayer(mGraphicsLayerLoc);
+
         addLayer(mGraphicsLayerTrack);
         addLayer(mGraphicsLayerPoint);
     }
@@ -65,6 +71,10 @@ public class ArcGisLocationLayer extends ArcGisBaseMapView {
      */
     public GraphicsLayer updateCurrentLocation(Point point) {
         this.point = point;
+        if (!isAddLocIcon) {
+            addLayer(mGraphicsLayerLoc);
+            isAddLocIcon = true;
+        }
         if (isFlow || isTrackRecording) {
             setExtent(point);
             setScale(getScale());

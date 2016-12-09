@@ -14,18 +14,19 @@ import android.widget.FrameLayout;
 
 import com.amap.api.location.AMapLocation;
 import com.esri.core.geometry.Point;
+import com.yunwei.frame.BuildConfig;
 import com.yunwei.frame.R;
 import com.yunwei.frame.common.dialog.DialogFactory;
 import com.yunwei.frame.common.handler.HandlerValue;
 import com.yunwei.frame.function.base.BaseActivity;
 import com.yunwei.frame.function.base.DataApplication;
 import com.yunwei.frame.function.mainFuncations.data.soure.MainRemoteRepo;
-import com.yunwei.frame.function.mainFuncations.homeFuncation.HomeFragment;
-import com.yunwei.frame.function.mainFuncations.mineFuncation.MineFragment;
-import com.yunwei.frame.function.mainFuncations.missionFuncation.MissionFragment;
-import com.yunwei.frame.function.mainFuncations.recordFuncation.RecordFragment;
-import com.yunwei.frame.function.mainFuncations.trackFuncation.MainPresenter;
-import com.yunwei.frame.function.mainFuncations.trackFuncation.TrackFragment;
+import com.yunwei.frame.function.mainFuncations.homeModule.HomeFragment;
+import com.yunwei.frame.function.mainFuncations.mineModule.MineFragment;
+import com.yunwei.frame.function.mainFuncations.missionModule.MissionFragment;
+import com.yunwei.frame.function.mainFuncations.recordModule.RecordFragment;
+import com.yunwei.frame.function.mainFuncations.trackModule.MainPresenter;
+import com.yunwei.frame.function.mainFuncations.trackModule.TrackFragment;
 import com.yunwei.frame.service.MonitorService;
 import com.yunwei.frame.utils.IActivityManage;
 import com.yunwei.frame.view.MainBottomNavigationBar;
@@ -125,6 +126,7 @@ public class MainActivity extends BaseActivity implements MainBottomNavigationBa
 
         initBottomNavigationBar();
         initPresenter();
+        addMapLayer();
         bindMonitorServer();
     }
 
@@ -133,10 +135,10 @@ public class MainActivity extends BaseActivity implements MainBottomNavigationBa
      */
     private void initBottomNavigationBar() {
         mainBottomNavigationBar.initConfig(this, R.id.main_container_FrameLayout);
-        mainBottomNavigationBar.addTabItem(R.mipmap.ic_home_white_24dp, R.string.main_home_tab).addTabItem(R.mipmap.main_tab_mission_n, R.string.main_mission_tab).addTabItem(R.mipmap.ic_location_on_white_24dp, R.string.main_track_tab).addTabItem(R.mipmap.main_tab_record_n, R.string.main_record_tab).addTabItem(R.mipmap.main_tab_mine_n, R.string.main_mine_tab);
+        mainBottomNavigationBar.addTabItem(R.mipmap.icon_main_tab_home_pr, R.string.main_home_tab).addTabItem(R.mipmap.icon_main_tab_mission_pr, R.string.main_mission_tab).addTabItem(R.mipmap.icon_main_tab_loc_pr, R.string.main_track_tab).addTabItem(R.mipmap.icon_main_tab_record_pr, R.string.main_record_tab).addTabItem(R.mipmap.icon_main_tab_mine_pr, R.string.main_mine_tab);
         mainBottomNavigationBar.addFragment(HomeFragment.newInstance()).addFragment(MissionFragment.newInstance()).addFragment(TrackFragment.newInstance()).addFragment(RecordFragment.newInstance()).addFragment(MineFragment.newInstance());
-        mainBottomNavigationBar.setDefaultFragment(2);
         mainBottomNavigationBar.setTabSelectedListener(this);
+        mainBottomNavigationBar.setFirstSelectedTab(TAB_TRACK);
     }
 
     /**
@@ -145,6 +147,14 @@ public class MainActivity extends BaseActivity implements MainBottomNavigationBa
     private void initPresenter() {
         mMainPresenter = new MainPresenter(MainRemoteRepo.newInstance(), this);
         mMainPresenter.reqQiNiuToken();
+    }
+
+    /**
+     * 添加图层
+     */
+    public void addMapLayer() {
+        /*设置图层*/
+        mapView.addFeatureLayer(BuildConfig.DEVICE_MAP_LAYER);
     }
 
     /**
@@ -226,7 +236,9 @@ public class MainActivity extends BaseActivity implements MainBottomNavigationBa
         DialogFactory.showMsgDialog(this, getString(R.string.dialog_title_exit), getString(R.string.exit_msg) + getString(R.string.app_name) + "?", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.gc();
                 IActivityManage.getInstance().exit();
+                System.exit(0);
             }
         });
     }

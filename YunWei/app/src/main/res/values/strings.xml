@@ -29,7 +29,7 @@
     <!--Dialog title-->
     <string name="dialog_title_exit">退出提示</string>
     <string name="dialog_title_switch_user">切换提示</string>
-    
+
     <!--Toast-->
     <string name="invalid_network">当前网络不可用!</string>
 
@@ -40,10 +40,23 @@
     <string name="account_pwd_error">账号或密码错误</string>
 
     <string name="foregroun_content_text">定位服务正在运行</string>
+    <string name="empty_str">暂无数据</string>
 
+    <!--RecyclerView底部加载显示信息-->
+    <string name="recycler_view_item_foot_pullup">上拉加载更多...</string>
+    <string name="recycler_view_item_foot_loading">正在加载数据...</string>
+
+    <!--足迹方式-->
     <array name="track_mode">
         <item>步行</item>
         <item>骑行</item>
         <item>驾驶</item>
     </array>
+    <!--历史记录-->
+    <string-array name="record_tab">
+        <item>任务</item>
+        <item>设施</item>
+        <item>隐患</item>
+        <item>维护</item>
+    </string-array>
 </resources>

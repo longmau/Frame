@@ -153,10 +153,13 @@ public class MainBottomNavigationBar extends BottomNavigationBar implements Bott
     }
 
     /**
+     * 设置默认选中的Tab
      * @param position
      */
-    public void setDefaultFragment(int position) {
+    public void setFirstSelectedTab(int position) {
         switchTab(position);
+        setFirstSelectedPosition(position).initialise();
+        onTabSelected(position);
     }
 
     @Override

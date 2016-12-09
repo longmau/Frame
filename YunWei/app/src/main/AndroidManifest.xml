@@ -49,7 +49,7 @@
             android:theme="@style/JK.SwipeBack.Transparent.Theme" />
 
         <activity
-            android:name=".function.mainFuncations.mineFuncation.SetingInfoActivity"
+            android:name=".function.mainFuncations.mineModule.SetingInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/JK.SwipeBack.Transparent.Theme" />
 
@@ -61,6 +61,16 @@
             android:value="@string/GAODE_MAP_KEY" />
 
         <service android:name="com.amap.api.location.APSService" />
+
+        <!--轮询Receiver-->
+        <receiver
+            android:name=".function.base.PollingReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.yunwei.polling" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

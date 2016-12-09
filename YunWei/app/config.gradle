@@ -1,4 +1,4 @@
-android{
+android {
     /**
      * 配制参数
      */
@@ -13,7 +13,7 @@ android{
         }
     }
 
-    defaultConfig{
+    defaultConfig {
         /**
          * manifest文件配制
          */
@@ -25,6 +25,8 @@ android{
         resValue "string", "BUGLY_ID", "\"590a3b733e\""
         /*逆向地理编码Key*/
         buildConfigField "String", "REGEO_MAP_KEY", "\"a7313eca70306f96eb6a3e6341a12355\""
+        /*设施图层*/
+        buildConfigField "String", "DEVICE_MAP_LAYER", "\"http://116.7.249.34:6080/arcgis/rest/services/XhsAppNew/FeatureServer/0\""
 
         /**
          * Base配制
