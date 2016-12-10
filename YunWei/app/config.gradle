@@ -8,7 +8,7 @@ android {
             buildConfigField "boolean", "LOGSWITCH", "true"
         }
         debug {
-            buildConfigField "String", "DOMAI", "\"http://10.10.10.182/\""
+            buildConfigField "String", "DOMAI", "\"http://idc.wayto.com.cn:8081/\""
             buildConfigField "boolean", "LOGSWITCH", "false"
         }
     }

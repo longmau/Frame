@@ -63,7 +63,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
     @Override
     public int getItemViewType(int position) {
         /* 最后一个item设置为footerView*/
-        if (position + 1 == getItemCount()) {
+        if (getItemCount() >= 20 && position + 1 == getItemCount()) {
             return TYPE_FOOTER;
         } else {
             return TYPE_ITEM;
@@ -90,21 +90,21 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
 
     @Override
     public int getItemCount() {
-        int count = mLists.size();
-        return count+1;
+        int count = getList().size();
+        if (count >= 20) { 
+            return ++count;
+        } else if (count > 0) {
+            return count;
+        } else {
+            return 0;
+        }
     }
 
     public class FooterViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tv;
-        private ProgressBar progressBar;
-
         public FooterViewHolder(View itemView) {
             super(itemView);
-            progressBar = (ProgressBar) itemView.findViewById(R.id.base_recycler_view_adapter_foot_progress_bar);
-            tv = (TextView) itemView.findViewById(R.id.base_recycler_view_adapter_foot_tv);
         }
-
     }
 
     public abstract RecyclerView.ViewHolder onCreateBaseViewHolder(ViewGroup parent, int viewType);

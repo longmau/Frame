@@ -1,6 +1,7 @@
 package com.yunwei.frame.function.base;
 
 import android.app.Application;
+import android.support.multidex.MultiDex;
 
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -34,6 +35,8 @@ public class DataApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        /*分包处理 DEX*/
+        MultiDex.install(getApplicationContext());
         instance = this;
         initLocationClient();
     }

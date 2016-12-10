@@ -43,8 +43,7 @@
     <string name="empty_str">暂无数据</string>
 
     <!--RecyclerView底部加载显示信息-->
-    <string name="recycler_view_item_foot_pullup">上拉加载更多...</string>
-    <string name="recycler_view_item_foot_loading">正在加载数据...</string>
+    <string name="recycler_view_item_foot_loading">加载更多&#8230;</string>
 
     <!--足迹方式-->
     <array name="track_mode">

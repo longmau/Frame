@@ -61,10 +61,11 @@ public class RecordFragment extends BaseFragment {
     }
 
     /**
-     *初始化TabLayout
+     * 初始化TabLayout
      */
     private void initTabLayout() {
         mViewPager.setAdapter(new RecordViewPagerAdapter(getChildFragmentManager(), tabIcons.length));
+        mViewPager.setOffscreenPageLimit(tabIcons.length);
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
         initTabView(mTabLayout);

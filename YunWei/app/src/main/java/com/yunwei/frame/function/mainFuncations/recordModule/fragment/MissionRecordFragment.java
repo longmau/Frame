@@ -75,7 +75,7 @@ public class MissionRecordFragment extends BaseFragment implements PullToRefresh
         loadingMore = true;
         adapter.setLODING_STATE(BaseRecyclerViewAdapter.LOADING);
         List<UserInfoEntity> list = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             UserInfoEntity entity = new UserInfoEntity();
             entity.setName("pullRefresh Item" + (i + 1));
             list.add(entity);

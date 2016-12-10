@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.yunwei.base"
-        minSdkVersion 16
+        minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
         versionName "1.0.1"
@@ -49,9 +49,13 @@ android {
         debug {
             signingConfig signingConfigs.config
             minifyEnabled false
-            shrinkResources true
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    dependencies {
+        compile 'com.android.support:multidex:1.0.0'
     }
 }
 /*获取系统当前时间*/
