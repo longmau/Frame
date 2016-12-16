@@ -35,7 +35,7 @@ public class MissionRecyclerViewAdapter extends BaseRecyclerViewAdapter<UserInfo
 
     @Override
     public RecyclerView.ViewHolder onCreateBaseViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder viewHolder = new ItemViewHolder(inflater.inflate(R.layout.item_mission_recyclerview,null));
+        RecyclerView.ViewHolder viewHolder = new ItemViewHolder(inflater.inflate(R.layout.item_mission_recyclerview, parent, false));
         return viewHolder;
     }
 

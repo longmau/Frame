@@ -3,22 +3,14 @@ package com.yunwei.frame.function.mainFuncations.recordModule.fragment;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.yunwei.frame.R;
 import com.yunwei.frame.function.account.data.UserInfoEntity;
-import com.yunwei.frame.function.base.BaseFragment;
 import com.yunwei.frame.function.base.BaseRecyclerViewAdapter;
+import com.yunwei.frame.function.mainFuncations.recordModule.RecordBaseFragment;
 import com.yunwei.frame.function.mainFuncations.recordModule.adapter.MissionRecyclerViewAdapter;
-import com.yunwei.frame.view.PullToRefreshRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * @author hezhiWu
@@ -28,13 +20,9 @@ import butterknife.ButterKnife;
  * @date 2016/12/7 14:14
  */
 
-public class MissionRecordFragment extends BaseFragment implements PullToRefreshRecyclerView.PullToRefreshRecyclerViewListener {
-
-    @BindView(R.id.record_recyclerView)
-    PullToRefreshRecyclerView recordRecyclerView;
+public class MissionRecordFragment extends RecordBaseFragment {
 
     private MissionRecyclerViewAdapter adapter;
-    private boolean loadingMore = false;
 
     @Override
     protected void dispatchMessage(Message msg) {
@@ -42,14 +30,16 @@ public class MissionRecordFragment extends BaseFragment implements PullToRefresh
         switch (msg.what) {
             case 0x401:
                 List<UserInfoEntity> entities = (List<UserInfoEntity>) msg.obj;
-                if (adapter.getLODING_STATE() == BaseRecyclerViewAdapter.LOADING) {
+                if (adapter.getLoadState() == BaseRecyclerViewAdapter.LOADING_MORE) {
                     adapter.addItems(entities, adapter.getItemCount() - 1);
-                    adapter.setLODING_STATE(BaseRecyclerViewAdapter.LOADING_END);
+                    adapter.setLoadState(BaseRecyclerViewAdapter.LOADING_MORE);
+                    loadMoreFinish();
                 } else {
                     adapter.clearList();
                     adapter.addItems(entities);
+                    closeRefresh();
                 }
-                recordRecyclerView.closeDownRefresh();
+                loadComplete();
                 break;
         }
     }
@@ -57,23 +47,18 @@ public class MissionRecordFragment extends BaseFragment implements PullToRefresh
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        adapter = new MissionRecyclerViewAdapter(getContext());
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_mission_record, null);
-        ButterKnife.bind(this, rootView);
-        adapter = new MissionRecyclerViewAdapter(getContext());
-        recordRecyclerView.setRecyclerViewAdapter(adapter);
-        recordRecyclerView.setListener(this);
-        return rootView;
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setAdapter(adapter);
+        startUpRefresh();
     }
 
     @Override
     public void onPullRefresh() {
-        loadingMore = true;
-        adapter.setLODING_STATE(BaseRecyclerViewAdapter.LOADING);
         List<UserInfoEntity> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             UserInfoEntity entity = new UserInfoEntity();

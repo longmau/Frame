@@ -5,10 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.yunwei.frame.R;
+import com.yunwei.frame.view.PullToRefreshRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,18 +23,19 @@ import java.util.List;
 
 public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public final static String TAG = "BaseRecyclerViewAdapter";
+
     /**
-     * 正在加载状态值
+     * 正在刷新
      */
-    public final static int LOADING = 0x10;
+    public final static int REFRESH = 0x10;
     /**
-     * 加载结束状态值
+     * 正在加载更多
      */
-    public final static int LOADING_END = 0x20;
+    public final static int LOADING_MORE = 0x20;
     /**
-     * 加载状态 LOADING or LOADING_END
+     * 加载状态 REFRESH or LOADING_MORE
      */
-    private int LODING_STATE;
+    private int loadState;
     /**
      * 普通Item View
      */
@@ -47,14 +48,22 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
     protected Context mContent;
     protected LayoutInflater inflater;
 
+    /*资源集合*/
     protected List<T> mLists = new ArrayList<>();
-
+    /*item 点击事件*/
     protected OnRecyclerViewItemClickListener listener;
+    /*item 长按事件*/
     protected OnRecyclerViewItemLongClickListener longListener;
+    /*刷新模式*/
+    private PullToRefreshRecyclerView.Mode mode;
+    /*是否正在刷新*/
+    public boolean isRefresh = false;
+    /*是否加载更多*/
+    public boolean isLoadMore = true;
 
     public BaseRecyclerViewAdapter(Context context) {
         this.mContent = context;
-        this.LODING_STATE = LOADING_END;
+        this.mode = PullToRefreshRecyclerView.Mode.DISABLED;
         if (context != null) {
             this.inflater = LayoutInflater.from(context);
         }
@@ -63,7 +72,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
     @Override
     public int getItemViewType(int position) {
         /* 最后一个item设置为footerView*/
-        if (getItemCount() >= 20 && position + 1 == getItemCount()) {
+        if (getItemCount() >= 20 && position + 1 == getItemCount() && (PullToRefreshRecyclerView.Mode.BOTH == mode || PullToRefreshRecyclerView.Mode.PULL_FROM_END == mode) && !isRefresh && isLoadMore) {
             return TYPE_FOOTER;
         } else {
             return TYPE_ITEM;
@@ -76,8 +85,9 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
             return onCreateBaseViewHolder(parent, viewType);
         } else if (viewType == TYPE_FOOTER) {
             return new FooterViewHolder(inflater.inflate(R.layout.item_base_recycler_view_adapter_foot, parent, false));
+        } else {
+            return new FooterViewHolder(inflater.inflate(R.layout.item_base_recycler_view_adapter_default, parent, false));
         }
-        return null;
     }
 
     @Override
@@ -91,7 +101,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
     @Override
     public int getItemCount() {
         int count = getList().size();
-        if (count >= 20) { 
+        if (count >= 20 && (PullToRefreshRecyclerView.Mode.BOTH == mode || PullToRefreshRecyclerView.Mode.PULL_FROM_END == mode) && !isRefresh && isLoadMore) {
             return ++count;
         } else if (count > 0) {
             return count;
@@ -170,20 +180,90 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
         notifyDataSetChanged();
     }
 
-    public void setLODING_STATE(int LODING_STATE) {
-        this.LODING_STATE = LODING_STATE;
+    /**
+     * 设置刷新模式
+     *
+     * @param mode
+     */
+    public void setMode(PullToRefreshRecyclerView.Mode mode) {
+        this.mode = mode;
+    }
+
+    /**
+     * 设置加载模式
+     *
+     * @param loadState
+     */
+    public void setLoadState(int loadState) {
+        this.loadState = loadState;
         notifyDataSetChanged();
     }
 
-    public int getLODING_STATE() {
-        return LODING_STATE;
+    /**
+     * 获取加载模式
+     *
+     * @return
+     */
+    public int getLoadState() {
+        return loadState;
     }
 
+    /**
+     * 设置是否正在下拉刷新
+     *
+     * @param refresh
+     */
+    public void setRefresh(boolean refresh) {
+        isRefresh = refresh;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 设置是否加载更多
+     * @param loadMore
+     */
+    public void setLoadMore(boolean loadMore) {
+        isLoadMore = loadMore;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 设置点击事件监听器
+     *
+     * @param listener
+     */
     public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * 设置长按事件监听器
+     *
+     * @param longListener
+     */
     public void setOnItemLongClickListener(OnRecyclerViewItemLongClickListener longListener) {
         this.longListener = longListener;
+    }
+
+    /**
+     * @author hezhiWu
+     * @version V1.0
+     * @Package com.yunwei.water.ui.biz.interfac
+     * @Description:RecyclerView 点击事件
+     * @date 2016/9/12 16:43
+     */
+    public interface OnRecyclerViewItemClickListener {
+        void onItemClick(View view, Object data, int position);
+    }
+
+    /**
+     * @author hezhiWu
+     * @version V1.0
+     * @Package com.yunwei.water.ui.biz.interfac
+     * @Description:RecyclerView 长按事件
+     * @date 2016/9/12 16:43
+     */
+    public interface OnRecyclerViewItemLongClickListener {
+        void onLongItemClick(View view, Object data, int position);
     }
 }
